@@ -1,65 +1,45 @@
 <template>
-  <v-layout
-    column
-    justify-center
-    align-center>
-    <v-flex
-      xs12
-      sm8
-      md6>
-      <div class="text-xs-center">
-        <logo/>
-        <vuetify-logo/>
-      </div>
-      <v-card>
-        <v-card-title class="headline">Welcome to the Vuetify + Nuxt.js template</v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>For more information on Vuetify, check out the <a
-            href="https://vuetifyjs.com"
-            target="_blank">documentation</a>.</p>
-          <p>If you have questions, please join the official <a
-            href="https://chat.vuetifyjs.com/"
-            target="_blank"
-            title="chat">discord</a>.</p>
-          <p>Find a bug? Report it on the github <a
-            href="https://github.com/vuetifyjs/vuetify/issues"
-            target="_blank"
-            title="contribute">issue board</a>.</p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank">Nuxt Documentation</a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank">Nuxt GitHub</a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer/>
-          <v-btn
-            color="primary"
-            flat
-            nuxt
-            to="/inspire">Continue</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
+  <div class="container">
+    <h2>Users</h2>
+    <ul class="users">
+      <li 
+        v-for="user in users" 
+        :key="user.id">
+        <nuxt-link :to="'/users/'+user.id">{{ user.name }}</nuxt-link>
+      </li>
+    </ul>
+  </div>
 </template>
-
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
+import axios from 'axios'
 export default {
-  components: {
-    Logo,
-    VuetifyLogo
+  async asyncData() {
+    const { data } = await axios.get(
+      'https://jsonplaceholder.typicode.com/users'
+    )
+    return { users: data }
   }
 }
 </script>
+<style scoped>
+.container {
+  text-align: center;
+  margin-top: 100px;
+  font-family: sans-serif;
+}
+.users {
+  list-style-type: none;
+}
+.users li a {
+  display: inline-block;
+  width: 200px;
+  border: 1px #ddd solid;
+  padding: 10px;
+  text-align: left;
+  color: #222;
+  text-decoration: none;
+}
+.user li a:hover {
+  color: orange;
+}
+</style>
